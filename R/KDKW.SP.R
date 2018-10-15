@@ -26,7 +26,7 @@
 
 KDKW.SP = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
   ce, gamma = 1/6, C=0, a, alpha = 1, A = 0, K, nk,
-  Hfun = bw.nrd0.flex, Hnum, kernel,
+  Hfun = bw.nrd0.mult, Hnum, kernel,
   lg = T,
   lib = "~/Rpack",
   ...){
@@ -174,18 +174,16 @@ KDKW.SP = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nro
 #' @describeIn KDKW.SP The same function for a set of different starting values, use e. g. with apply or mclapply.
 #' @export
 
-KDKW.SP.theta.0 = function(theta.0, s.obs, simfun, rest,
-  ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum,
-  lg,
-  lib,
+KDKW.SP.theta.0 = function(theta.0, s.obs, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
+  ce, gamma = 1/6, C=0, a, alpha = 1, A = 0, K, nk,
+  Hfun = bw.nrd0.mult, Hnum,
+  lg = T,
   ...){
 
 	try(KDKW.SP(s.obs=s.obs, theta.0=theta.0, simfun=simfun, rest=rest,
   ce=ce, gamma=gamma, C=C, a=a, alpha=alpha, A=A, K=K, nk=nk,
   Hfun = Hfun, Hnum=Hnum,
   lg = lg,
-  lib = lib,
   ...), silent=TRUE)
 
 }
@@ -193,18 +191,16 @@ KDKW.SP.theta.0 = function(theta.0, s.obs, simfun, rest,
 #' @describeIn KDKW.SP The same function for a set of different summary statistics, use e. g. with apply or mclapply.
 #' @export
 
-KDKW.SP.s.obs = function(s.obs, theta.0, simfun, rest,
-  ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum,
-  lg,
-  lib,
+KDKW.SP.s.obs = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
+  ce, gamma = 1/6, C=0, a, alpha = 1, A = 0, K, nk,
+  Hfun = bw.nrd0.mult, Hnum,
+  lg = T,
   ...){
 
 	try(KDKW.SP(s.obs=s.obs, theta.0=theta.0, simfun=simfun, rest=rest,
   ce=ce, gamma=gamma, C=C, a=a, alpha=alpha, A=A, K=K, nk=nk,
   Hfun = Hfun, Hnum=Hnum,
   lg = lg,
-  lib = lib,
   ...), silent=TRUE)
 
 }
@@ -212,18 +208,16 @@ KDKW.SP.s.obs = function(s.obs, theta.0, simfun, rest,
 #' @describeIn KDKW.SP The same function for a set of different starting values and different summary statistics, use e. g. with apply or mclapply.
 #' @export
 
-KDKW.SP.mult1 = function(mult, simfun, rest,
-                         ce, gamma, C, a, alpha, A, K, nk,
-                         Hfun, Hnum,
-                         lg,
-                         lib,
+KDKW.SP.mult1 = function(mult, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
+                         ce, gamma = 1/6, C=0, a, alpha = 1, A = 0, K, nk,
+                         Hfun = bw.nrd0.mult, Hnum,
+                         lg = T,
                          ...){
 
   try(KDKW.SP(s.obs=mult[[1]], theta.0=mult[[2]], simfun=simfun, rest=rest,
               ce=ce, gamma=gamma, C=C, a=a, alpha=alpha, A=A, K=K, nk=nk,
               Hfun = Hfun, Hnum=Hnum,
               lg = lg,
-              lib = lib,
               ...), silent=TRUE)
 
 }

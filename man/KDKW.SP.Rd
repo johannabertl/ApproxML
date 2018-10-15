@@ -9,17 +9,20 @@
 \usage{
 KDKW.SP(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2, nrow =
   length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a, alpha = 1,
-  A = 0, K, nk, Hfun = bw.nrd0.flex, Hnum, kernel, lg = T,
+  A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T,
   lib = "~/Rpack", ...)
 
-KDKW.SP.theta.0(theta.0, s.obs, simfun, rest, ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, lg, lib, ...)
+KDKW.SP.theta.0(theta.0, s.obs, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
+  nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+  alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, lg = T, ...)
 
-KDKW.SP.s.obs(s.obs, theta.0, simfun, rest, ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, lg, lib, ...)
+KDKW.SP.s.obs(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
+  nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+  alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, lg = T, ...)
 
-KDKW.SP.mult1(mult, simfun, rest, ce, gamma, C, a, alpha, A, K, nk, Hfun, Hnum,
-  lg, lib, ...)
+KDKW.SP.mult1(mult, simfun, rest = matrix(c(-Inf, Inf), ncol = 2, nrow =
+  length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a, alpha = 1,
+  A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, lg = T, ...)
 }
 \arguments{
 \item{s.obs}{Vector of observed summary statistics}

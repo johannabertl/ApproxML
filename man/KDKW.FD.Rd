@@ -8,14 +8,17 @@
 \usage{
 KDKW.FD(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2, nrow =
   length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a, alpha = 1,
-  A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T,
-  lib = "~/Rpack", ...)
+  A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T, ...)
 
-KDKW.FD.theta.0(theta.0, s.obs, simfun, rest, ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, kernel, lg, lib, ...)
+KDKW.FD.theta.0(theta.0, s.obs, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
+  nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+  alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T,
+  ...)
 
-KDKW.FD.s.obs(s.obs, theta.0, simfun, rest, ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, kernel, lg, lib, ...)
+KDKW.FD.s.obs(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
+  nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+  alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T,
+  ...)
 }
 \arguments{
 \item{s.obs}{Vector of observed summary statistics}
@@ -57,9 +60,9 @@ This function approximates the maximum likelihood estimate of the multivariate p
 }
 \section{Functions}{
 \itemize{
-\item \code{KDKW.FD.theta.0}: The same function for a set of different starting values, use e. g. with apply or mclapply.
+\item \code{KDKW.FD.theta.0}: The same function for a set of different starting values, use e. g. with apply or mclapply. It uses \code{try} catch errors.
 
-\item \code{KDKW.FD.s.obs}: The same function for a set of different summary statistics, use e. g. with apply or mclapply.
+\item \code{KDKW.FD.s.obs}: The same function for a set of different summary statistics, use e. g. with apply or mclapply. It uses \code{try} catch errors.
 }}
 
 \section{Gain sequences}{

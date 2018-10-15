@@ -53,7 +53,6 @@ KDKW.FD = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nro
   ce, gamma = 1/6, C = 0, a, alpha = 1, A = 0, K, nk,
   Hfun = bw.nrd0.mult, Hnum, kernel,
   lg = T,
-  lib = "~/Rpack",
   ...){
 
   t1=proc.time()[3]
@@ -196,41 +195,37 @@ KDKW.FD = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nro
 
 ### Functions for apply (and mclapply):
 
-#' @describeIn KDKW.FD The same function for a set of different starting values, use e. g. with apply or mclapply.
+#' @describeIn KDKW.FD The same function for a set of different starting values, use e. g. with apply or mclapply. It uses \code{try} catch errors.
 #' @export
 
-KDKW.FD.theta.0 = function(theta.0, s.obs, simfun, rest,
-  ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, kernel,
-  lg,
-  lib,
+KDKW.FD.theta.0 = function(theta.0, s.obs, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
+  ce, gamma=1/6, C=0, a, alpha=1, A=0, K, nk,
+  Hfun = bw.nrd0.mult, Hnum, kernel,
+  lg=T,
   ...){
 
 	try(KDKW.FD(s.obs=s.obs, theta.0=theta.0, simfun=simfun, rest=rest,
   ce=ce, gamma=gamma, C=C, a=a, alpha=alpha, A=A, K=K, nk=nk,
   Hfun = Hfun, Hnum=Hnum, kernel=kernel,
   lg = lg,
-  lib = lib,
   ...), silent=TRUE)
 
 }
 
 
-#' @describeIn KDKW.FD The same function for a set of different summary statistics, use e. g. with apply or mclapply.
+#' @describeIn KDKW.FD The same function for a set of different summary statistics, use e. g. with apply or mclapply. It uses \code{try} catch errors.
 #' @export
 
-KDKW.FD.s.obs = function(s.obs, theta.0, simfun, rest,
-  ce, gamma, C, a, alpha, A, K, nk,
-  Hfun, Hnum, kernel,
-  lg,
-  lib,
+KDKW.FD.s.obs = function(s.obs, theta.0, simfun, rest=matrix(c(-Inf, Inf), ncol=2, nrow=length(theta.0), byrow=T),
+  ce, gamma=1/6, C=0, a, alpha=1, A=0, K, nk,
+  Hfun = bw.nrd0.mult, Hnum, kernel,
+  lg=T,
   ...){
 
 	try(KDKW.FD(s.obs=s.obs, theta.0=theta.0, simfun=simfun, rest=rest,
   ce=ce, gamma=gamma, C=C, a=a, alpha=alpha, A=A, K=K, nk=nk,
   Hfun = Hfun, Hnum=Hnum, kernel=kernel,
   lg = lg,
-  lib = lib,
   ...), silent=TRUE)
 
 }
