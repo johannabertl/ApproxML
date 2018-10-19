@@ -1,11 +1,11 @@
 #' Simulation function for a Poisson model with one random component
 #'
-#' The function simulates data under a Poisson model with given explanatory variables \code{x} and parameter vector \code{theta}, consisting of the coefficients of the fixed effects, beta, and sigma2, the variance of a single random effect with distribution \code{N(0, sigma2)}. For each of the \code{nk} simulated datasets, a vector of summary statistics is computed, consisting of the regression coefficients estimated in a Poisson model without random effects, and an estimate of the dispersion based on the Pearson statistic (sum of the squared Pearson residuals) of this model. The function is designed to estimate theta by the approximate maximum likelihood algorithm in \code{KDKW.FD} or \code{KDKW.SP}.
+#' The function simulates data under a Poisson model with given explanatory variables \code{x} and parameter vector \code{theta}, consisting of the coefficients of the fixed effects, beta, and sigma, the standard deviation of a single random effect with distribution \code{N(0, sigma^2)}. For each of the \code{nk} simulated datasets, a vector of summary statistics is computed, consisting of the regression coefficients estimated in a Poisson model without random effects, and an estimate of the dispersion based on the Pearson statistic (sum of the squared Pearson residuals) of this model. The function is designed to estimate theta by the approximate maximum likelihood algorithm in \code{KDKW.FD} or \code{KDKW.SP}.
 #'
 #' SIMpoisson_glmm uses \code{glm} to obtain the summary statistics. This probably has a lot of overhead and could maybe be replaced by a faster alternative.
 #'
 #' @param nk integer, number of datasets to be simulated
-#' @param theta numeric, parameter vector. theta = c(beta, sigma^2)
+#' @param theta numeric, parameter vector. theta = c(beta, sigma)
 #' @param x numeric matrix, explanatory variables
 #'
 #' @author Johanna Bertl
@@ -25,9 +25,9 @@
 #' plot(testsim2[,1], testsim2[,2])
 #' apply(testsim2, 2, mean)
 #'
-#' testsim_beta = SIMpoisson_glmm2_beta(200, 2, sigma2=1, x)
+#' testsim_beta = SIMpoisson_glmm2_beta(200, 2, sigma=1, x)
 #'
-#' testsim_sigma2 = SIMpoisson_glmm_sigma2(20, 1, beta = 2, x)
+#' testsim_sigma = SIMpoisson_glmm_sigma(20, 1, beta = 2, x)
 #'
 #' @export
 
@@ -37,19 +37,19 @@ SIMpoisson_glmm = function(nk, theta, x){
   n = nrow(x)
   k = ncol(x)
   beta = theta[1:k]
-  sigma2 = theta[length(theta)]
+  sigma = theta[length(theta)]
   sumstat = matrix(NA, ncol=k+1, nrow=nk)
 
   for(i in 1:nk){
     # simulate random effect
-    u = rnorm(n, 0, sigma2)
+    u = rnorm(n, 0, sigma)
     # simulate Poisson data
     eta = x%*%beta + u
     y = rpois(n, exp(eta))
 
     # summary statistics
     fit_glm = glm(y ~ 0+x, family=poisson)
-    sumstat[i,k+1] = sum(residuals(fit_glm, type="pearson")^2)
+    sumstat[i,k+1] = sqrt(sum(residuals(fit_glm, type="pearson")^2))
     sumstat[i,1:k] = fit_glm$coefficients
 
   }
@@ -59,10 +59,10 @@ SIMpoisson_glmm = function(nk, theta, x){
 }
 
 
-#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_beta performs the same simulations as SIMpoisson_glmm, but it is used to estimate beta only when sigma2 is known.
+#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_beta performs the same simulations as SIMpoisson_glmm, but it is used to estimate beta only when sigma is known.
 #' @export
 
-SIMpoisson_glmm_beta = function(nk, theta, sigma2, x){
+SIMpoisson_glmm_beta = function(nk, theta, sigma, x){
 
   x = as.matrix(x)
   n = nrow(x)
@@ -72,7 +72,7 @@ SIMpoisson_glmm_beta = function(nk, theta, sigma2, x){
 
   for(i in 1:nk){
     # simulate random effect
-    u = rnorm(n, 0, sigma2)
+    u = rnorm(n, 0, sigma)
     # simulate Poisson data
     eta = x%*%beta + u
     y = rpois(n, exp(eta))
@@ -88,28 +88,28 @@ SIMpoisson_glmm_beta = function(nk, theta, sigma2, x){
 }
 
 
-#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_sigma2 performs the same simulations as SIMpoisson_glmm, but it is used to estimate sigma2 only when beta is known.
+#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_sigma performs the same simulations as SIMpoisson_glmm, but it is used to estimate sigma only when beta is known.
 #' @export
 
-SIMpoisson_glmm_sigma2 = function(nk, theta, beta, x){
+SIMpoisson_glmm_sigma = function(nk, theta, beta, x){
 
   x = as.matrix(x)
   n = nrow(x)
   k = ncol(x)
-  sigma2 = theta
+  sigma = theta
   sumstat = matrix(NA, ncol=1, nrow=nk)
 
   for(i in 1:nk){
     # simulate random effect
-    u = rnorm(n, 0, sigma2)
+    u = rnorm(n, 0, sigma)
     # simulate Poisson data
     eta = x%*%beta + u
     y = rpois(n, exp(eta))
 
     # summary statistics
 
-    r = ( y - exp(eta) ) / sqrt(exp(eta))
-    sumstat[i,1] = sum(r^2)
+    r = ( y - exp(x%*%beta) ) / sqrt(exp(x%*%beta))
+    sumstat[i,1] = sqrt(sum(r^2))
 
   }
 
