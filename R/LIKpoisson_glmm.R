@@ -1,6 +1,8 @@
 #' Likelihood of the Poisson GLMM
 #'
 #' The likelihood of the parameters beta and sigma in a Poisson GLMM is computed. The integral is calculated with Gauss-Hermite quadrature.
+#' 
+#' The function dpois is used to evaluate the conditional likelihood, as it is fast (implemented in C) and can handle large values of y, that can otherwise be problematic in the evaluation of factorial(y). 
 #'
 #' @param beta scalar
 #' @param sigma scalar
@@ -31,6 +33,6 @@ LIKpoisson_glmm_single = function(x, y, beta, sigma){
 }
 
 CONDLIKpoisson_glmm_single = function(u, beta, x, y) {
-  ( exp( x %*% beta + u) )^y * (exp(-exp( x %*% beta + u ))) / factorial(y)
+  dpois(y, exp( x %*% beta + u))
 }
 

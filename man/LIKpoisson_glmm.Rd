@@ -18,6 +18,9 @@ LIKpoisson_glmm(beta, sigma, x, y)
 \description{
 The likelihood of the parameters beta and sigma in a Poisson GLMM is computed. The integral is calculated with Gauss-Hermite quadrature.
 }
+\details{
+The function dpois is used to evaluate the conditional likelihood, as it is fast (implemented in C) and can handle large values of y, that can otherwise be problematic in the evaluation of factorial(y).
+}
 \examples{
 
 x = 1:3
