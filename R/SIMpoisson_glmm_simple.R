@@ -27,7 +27,7 @@ SIMpoisson_glmm_simple = function(nk, theta, n){
 
   require(simGLMM)
 
-  data = simDataGLMM(clus=n*nk, rep=1, fixedMean=theta[1], fixedCoef=NULL, fixedMat=NULL, covM = as.matrix(theta[2]), disFam=poisson())
+  data = simDataGLMM(clus=n*nk, rep=1, fixedMean=theta[1], covM = as.matrix(theta[2]), disFam=poisson())
 
   h = factor(rep(1:nk, each=n))
 
