@@ -17,9 +17,10 @@ SIMCRNpoisson_glmm_simple(nk, theta, seed, n)
 }
 \description{
 The function simulates data under a Poisson model with fixed mean lambda and a random intercept with with distribution \code{N(0, sigma^2)}. For each of the \code{nk} simulated datasets, a vector of summary statistics is computed, consisting of the mean and an estimate of the dispersion based on the Pearson statistic (sum of the squared Pearson residuals) of this model. The function is designed to estimate theta by the approximate maximum likelihood algorithm in \code{KDKW.FD} or \code{KDKW.SP}.
-The samples are obtained with the given seed.
 }
 \details{
+The simulations are obtained with the given seed (designed for the use of Common Random Numbers in the Approximate Maximum Likelihood Algorithm).
+
 SIMpoisson_glmm_simple uses simGLMM::simDataGLMM.
 
 This function might be replaced by a more flexible function based on simGLMM::simDataGLMMdesign that uses a design matrix.

@@ -21,17 +21,21 @@
 #' plot(testsim[,1], testsim[,2])
 #' apply(testsim, 2, mean)
 #'
-#' testsim2 = SIMpoisson_glmm2(200, c(5,1), x)
+#' testsim2 = SIMpoisson_glmm_regr(200, c(5,1), x)
 #' plot(testsim2[,1], testsim2[,2])
 #' apply(testsim2, 2, mean)
 #'
-#' testsim_beta = SIMpoisson_glmm2_beta(200, 2, sigma=1, x)
+#' x = matrix(c(rep(1, 50), rep(0, 100), rep(1, 50)), ncol=2 )
+#' testsim3 = SIMpoisson_glmm_regr(100, c(3,5,1), x)
+#' apply(testsim3, 2, mean)
+#'
+#' testsim_beta = SIMpoisson_glmm_beta(200, 2, sigma=1, x)
 #'
 #' testsim_sigma = SIMpoisson_glmm_sigma(20, 1, beta = 2, x)
 #'
 #' @export
 
-SIMpoisson_glmm_regr2 = function(nk, theta, x){
+SIMpoisson_glmm_regr = function(nk, theta, x){
 
   x = as.matrix(x)
   n = nrow(x)
@@ -59,7 +63,7 @@ SIMpoisson_glmm_regr2 = function(nk, theta, x){
 }
 
 
-#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_beta performs the same simulations as SIMpoisson_glmm, but it is used to estimate beta only when sigma is known.
+#' @describeIn SIMpoisson_glmm_regr SIMpoisson_glmm_beta performs the same simulations as SIMpoisson_glmm, but it is used to estimate beta only when sigma is known.
 #' @export
 
 SIMpoisson_glmm_beta = function(nk, theta, sigma, x){
@@ -88,7 +92,7 @@ SIMpoisson_glmm_beta = function(nk, theta, sigma, x){
 }
 
 
-#' @describeIn SIMpoisson_glmm SIMpoisson_glmm_sigma performs the same simulations as SIMpoisson_glmm, but it is used to estimate sigma only when beta is known.
+#' @describeIn SIMpoisson_glmm_regr SIMpoisson_glmm_sigma performs the same simulations as SIMpoisson_glmm, but it is used to estimate sigma only when beta is known.
 #' @export
 
 SIMpoisson_glmm_sigma = function(nk, theta, beta, x){
