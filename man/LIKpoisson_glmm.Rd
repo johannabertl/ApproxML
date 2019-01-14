@@ -2,9 +2,12 @@
 % Please edit documentation in R/LIKpoisson_glmm.R
 \name{LIKpoisson_glmm}
 \alias{LIKpoisson_glmm}
+\alias{LOGLIKpoisson_glmm}
 \title{Likelihood of the Poisson GLMM}
 \usage{
 LIKpoisson_glmm(beta, sigma, x, y)
+
+LOGLIKpoisson_glmm(beta, sigma, x, y)
 }
 \arguments{
 \item{beta}{scalar}
@@ -20,7 +23,14 @@ The likelihood of the parameters beta and sigma in a Poisson GLMM is computed. T
 }
 \details{
 The function dpois is used to evaluate the conditional likelihood, as it is fast (implemented in C) and can handle large values of y, that can otherwise be problematic in the evaluation of factorial(y).
+
+The loglikelihood can sometimes be obtained even when the likelihood evaluates to zero (numerically).
 }
+\section{Functions}{
+\itemize{
+\item \code{LOGLIKpoisson_glmm}: LOGLIKpoisson_glmm directly sums the log of the likelihood terms that are computed in the same way as by the function LIKpoisson_glmm.
+}}
+
 \examples{
 
 x = 1:3

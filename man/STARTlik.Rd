@@ -2,10 +2,13 @@
 % Please edit documentation in R/STARTlik.R
 \name{STARTlik}
 \alias{STARTlik}
+\alias{LIK}
 \title{Likelihood estimation for starting points}
 \usage{
-STARTlik(int, sampling, N1, s.obs, simfun, Hfun = bw.nrd0.mult, kernel, nk,
-  ...)
+STARTlik(int, sampling, N1, s.obs, simfun, Hfun = bw.nrd0.mult, kernel,
+  nk, ...)
+
+LIK(theta, simfun, nk, Hfun, kernel, s.obs, ...)
 }
 \arguments{
 \item{int}{matrix of intervals (2 columns, p rows)}
@@ -27,13 +30,18 @@ STARTlik(int, sampling, N1, s.obs, simfun, Hfun = bw.nrd0.mult, kernel, nk,
 \item{...}{further parameters for simfun}
 }
 \description{
-This function draws starting points from a given matrix of intervals (randomly samples from a uniform distribution or on a grid). For each starting point, the likelihood is simulated.
+The function STARTlik draws starting points from a given matrix of intervals (randomly sampled from a uniform distribution or on a grid). For each starting point, the likelihood is estimated from simulations.
 }
 \details{
 For points on a grid, the number of starting points N1 is approximate. For each dimension, round(N1^(1/p)) equally spaced points in the interval are chosen, with p being the number of dimensions.
 
 Note that this could easily be parallelized. This is currently not implemented, since it depends on the system the program is run on.
 }
+\section{Functions}{
+\itemize{
+\item \code{LIK}: The function LIK estimates the likelihood at a given point. It is used in SIMlik.
+}}
+
 \examples{
 
 int = matrix(c(-2, 5, 0, 2), ncol=2, nrow=2, byrow=T)

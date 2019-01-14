@@ -1,6 +1,6 @@
 #' Likelihood estimation for starting points
 #'
-#' This function draws starting points from a given matrix of intervals (randomly samples from a uniform distribution or on a grid). For each starting point, the likelihood is simulated.
+#' The function STARTlik draws starting points from a given matrix of intervals (randomly sampled from a uniform distribution or on a grid). For each starting point, the likelihood is estimated from simulations.
 #'
 #' For points on a grid, the number of starting points N1 is approximate. For each dimension, round(N1^(1/p)) equally spaced points in the interval are chosen, with p being the number of dimensions.
 #'
@@ -56,9 +56,9 @@ STARTlik = function(int, sampling, N1, s.obs, simfun, Hfun=bw.nrd0.mult, kernel,
   start.list = lapply(start.list, unlist)
 
 
-  #### Likelihood computation ####
+  #### Likelihood estimation ####
 
-  lik.list = lapply(start.list, liksim, simfun=simfun, nk=nk, Hfun=Hfun, kernel=kernel, s.obs=s.obs, ...)
+  lik.list = lapply(start.list, lik, simfun=simfun, nk=nk, Hfun=Hfun, kernel=kernel, s.obs=s.obs, ...)
   lik = unlist(lik.list)
 
 
@@ -76,7 +76,10 @@ STARTlik = function(int, sampling, N1, s.obs, simfun, Hfun=bw.nrd0.mult, kernel,
 runif2 = function(m, n){runif(n, m[1], m[2])}
 seq2 = function(int, length.out) {seq(from=int[1], to = int[2], length.out = length.out)}
 
-liksim = function(theta, simfun, nk, Hfun, kernel, s.obs, ...){
+#' @describeIn STARTlik The function LIK estimates the likelihood at a given point. It is used in SIMlik.
+#' @export
+
+LIK = function(theta, simfun, nk, Hfun, kernel, s.obs, ...){
   sk = simfun(nk, theta, ...)
 
   Hk = Hfun(sk)

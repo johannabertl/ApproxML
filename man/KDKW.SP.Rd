@@ -7,17 +7,17 @@
 \alias{KDKW.SP.mult1}
 \title{Approximate maximum likelihood algorithm based on stochastic approximation with simultaneous perturbations}
 \usage{
-KDKW.SP(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2, nrow =
-  length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a, alpha = 1,
-  A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel, lg = T,
-  lib = "~/Rpack", ...)
-
-KDKW.SP.theta.0(theta.0, s.obs, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
+KDKW.SP(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
   nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+  alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, kernel,
+  lg = T, lib = "~/Rpack", ...)
+
+KDKW.SP.theta.0(theta.0, s.obs, simfun, rest = matrix(c(-Inf, Inf), ncol
+  = 2, nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
   alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, lg = T, ...)
 
-KDKW.SP.s.obs(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol = 2,
-  nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
+KDKW.SP.s.obs(s.obs, theta.0, simfun, rest = matrix(c(-Inf, Inf), ncol =
+  2, nrow = length(theta.0), byrow = T), ce, gamma = 1/6, C = 0, a,
   alpha = 1, A = 0, K, nk, Hfun = bw.nrd0.mult, Hnum, lg = T, ...)
 
 KDKW.SP.mult1(mult, simfun, rest = matrix(c(-Inf, Inf), ncol = 2, nrow =
