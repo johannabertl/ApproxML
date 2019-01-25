@@ -1,15 +1,13 @@
 Package: ApproxML
 Type: Package
-Title: Approximate maximum likelihood estimation
-Version: 1.0.0
-Author: Johanna Bertl
-Maintainer: Johanna Bertl <johanna.bertl@math.au.dk>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
+Title: What the package does (short line)
+Version: 1.0
+Date: 2019-01-17
+Author: Who wrote it
+Maintainer: Who to complain to <yourfault@somewhere.net>
+Description: More about what it does (maybe more than one
+      line)
 License: What license is it under?
-Encoding: UTF-8
-LazyData: true
-Suggests:
-  ks,
-  mvtnorm
+Imports: Rcpp (>= 1.0.0)
+LinkingTo: Rcpp, RcppArmadillo
 RoxygenNote: 6.1.1

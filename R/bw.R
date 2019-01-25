@@ -66,7 +66,6 @@ bw.nrd0.mult = function(x){
   else {bw.nrd0.mod(x)}
 }
 
-
 #### Functions for kernel density derivative estimation ####
 # (only first derivative)
 
