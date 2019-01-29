@@ -7,8 +7,8 @@
 using namespace Rcpp;
 
 // KDKW_FD_Rcpp
-List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector theta_min, NumericVector theta_max, String simfun, int K, int nk, double a, double ce, double alpha, double gamma, int A, int C);
-RcppExport SEXP _ApproxML_KDKW_FD_Rcpp(SEXP s_obsSEXP, SEXP theta_0SEXP, SEXP theta_minSEXP, SEXP theta_maxSEXP, SEXP simfunSEXP, SEXP KSEXP, SEXP nkSEXP, SEXP aSEXP, SEXP ceSEXP, SEXP alphaSEXP, SEXP gammaSEXP, SEXP ASEXP, SEXP CSEXP) {
+List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector theta_min, NumericVector theta_max, String simfun, List fixed_parameters, int K, int nk, double a, double ce, double alpha, double gamma, int A, int C);
+RcppExport SEXP _ApproxML_KDKW_FD_Rcpp(SEXP s_obsSEXP, SEXP theta_0SEXP, SEXP theta_minSEXP, SEXP theta_maxSEXP, SEXP simfunSEXP, SEXP fixed_parametersSEXP, SEXP KSEXP, SEXP nkSEXP, SEXP aSEXP, SEXP ceSEXP, SEXP alphaSEXP, SEXP gammaSEXP, SEXP ASEXP, SEXP CSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
@@ -17,6 +17,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< NumericVector >::type theta_min(theta_minSEXP);
     Rcpp::traits::input_parameter< NumericVector >::type theta_max(theta_maxSEXP);
     Rcpp::traits::input_parameter< String >::type simfun(simfunSEXP);
+    Rcpp::traits::input_parameter< List >::type fixed_parameters(fixed_parametersSEXP);
     Rcpp::traits::input_parameter< int >::type K(KSEXP);
     Rcpp::traits::input_parameter< int >::type nk(nkSEXP);
     Rcpp::traits::input_parameter< double >::type a(aSEXP);
@@ -25,7 +26,7 @@ BEGIN_RCPP
     Rcpp::traits::input_parameter< double >::type gamma(gammaSEXP);
     Rcpp::traits::input_parameter< int >::type A(ASEXP);
     Rcpp::traits::input_parameter< int >::type C(CSEXP);
-    rcpp_result_gen = Rcpp::wrap(KDKW_FD_Rcpp(s_obs, theta_0, theta_min, theta_max, simfun, K, nk, a, ce, alpha, gamma, A, C));
+    rcpp_result_gen = Rcpp::wrap(KDKW_FD_Rcpp(s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha, gamma, A, C));
     return rcpp_result_gen;
 END_RCPP
 }
@@ -66,50 +67,39 @@ BEGIN_RCPP
     return rcpp_result_gen;
 END_RCPP
 }
-// set_fixed_parameters
-arma::mat set_fixed_parameters(List fixed_parameters);
-RcppExport SEXP _ApproxML_set_fixed_parameters(SEXP fixed_parametersSEXP) {
+// chooseRcpp
+arma::mat chooseRcpp(int n, double theta, int nk);
+RcppExport SEXP _ApproxML_chooseRcpp(SEXP nSEXP, SEXP thetaSEXP, SEXP nkSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< List >::type fixed_parameters(fixed_parametersSEXP);
-    rcpp_result_gen = Rcpp::wrap(set_fixed_parameters(fixed_parameters));
-    return rcpp_result_gen;
-END_RCPP
-}
-// testfun2
-arma::mat testfun2(arma::vec parameters, arma::mat fixed_parameters);
-RcppExport SEXP _ApproxML_testfun2(SEXP parametersSEXP, SEXP fixed_parametersSEXP) {
-BEGIN_RCPP
-    Rcpp::RObject rcpp_result_gen;
-    Rcpp::RNGScope rcpp_rngScope_gen;
-    Rcpp::traits::input_parameter< arma::vec >::type parameters(parametersSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type fixed_parameters(fixed_parametersSEXP);
-    rcpp_result_gen = Rcpp::wrap(testfun2(parameters, fixed_parameters));
+    Rcpp::traits::input_parameter< int >::type n(nSEXP);
+    Rcpp::traits::input_parameter< double >::type theta(thetaSEXP);
+    Rcpp::traits::input_parameter< int >::type nk(nkSEXP);
+    rcpp_result_gen = Rcpp::wrap(chooseRcpp(n, theta, nk));
     return rcpp_result_gen;
 END_RCPP
 }
 // testmodelfac
-arma::vec testmodelfac(String type, arma::vec parameters, arma::mat fixed_parameters);
+arma::mat testmodelfac(String type, arma::vec parameters, List fixed_parameters);
 RcppExport SEXP _ApproxML_testmodelfac(SEXP typeSEXP, SEXP parametersSEXP, SEXP fixed_parametersSEXP) {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
     Rcpp::RNGScope rcpp_rngScope_gen;
     Rcpp::traits::input_parameter< String >::type type(typeSEXP);
     Rcpp::traits::input_parameter< arma::vec >::type parameters(parametersSEXP);
-    Rcpp::traits::input_parameter< arma::mat >::type fixed_parameters(fixed_parametersSEXP);
+    Rcpp::traits::input_parameter< List >::type fixed_parameters(fixed_parametersSEXP);
     rcpp_result_gen = Rcpp::wrap(testmodelfac(type, parameters, fixed_parameters));
     return rcpp_result_gen;
 END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
-    {"_ApproxML_KDKW_FD_Rcpp", (DL_FUNC) &_ApproxML_KDKW_FD_Rcpp, 13},
+    {"_ApproxML_KDKW_FD_Rcpp", (DL_FUNC) &_ApproxML_KDKW_FD_Rcpp, 14},
     {"_ApproxML_SIMtestC", (DL_FUNC) &_ApproxML_SIMtestC, 3},
     {"_ApproxML_bw_nrd0", (DL_FUNC) &_ApproxML_bw_nrd0, 1},
     {"_ApproxML_normal_diag", (DL_FUNC) &_ApproxML_normal_diag, 3},
-    {"_ApproxML_set_fixed_parameters", (DL_FUNC) &_ApproxML_set_fixed_parameters, 1},
-    {"_ApproxML_testfun2", (DL_FUNC) &_ApproxML_testfun2, 2},
+    {"_ApproxML_chooseRcpp", (DL_FUNC) &_ApproxML_chooseRcpp, 3},
     {"_ApproxML_testmodelfac", (DL_FUNC) &_ApproxML_testmodelfac, 3},
     {NULL, NULL, 0}
 };

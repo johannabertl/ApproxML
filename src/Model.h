@@ -10,7 +10,7 @@ using namespace Rcpp;
 class Model {
 public:
   arma::vec parameters;
-  arma::mat fixed_parameters;
+  List fixed_parameters;
   //arma::mat data;
   static Model* Create_Model(String type);
   // virtual void set_fixed_parameters(List fixed_parameters);

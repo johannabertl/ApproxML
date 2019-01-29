@@ -4,8 +4,9 @@
 \alias{KDKW_FD_Rcpp}
 \title{Approximate maximum likelihood algorithm based on Kiefer-Wolfowitz stochastic approximation}
 \usage{
-KDKW_FD_Rcpp(s_obs, theta_0, theta_min, theta_max, simfun, K, nk, a, ce,
-  alpha = 1, gamma = 1/6, A = 0L, C = 0L, fixed_parameters)
+KDKW_FD_Rcpp(s_obs, theta_0, theta_min, theta_max, simfun,
+  fixed_parameters, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L,
+  C = 0L)
 }
 \arguments{
 \item{s_obs}{Vector of observed summary statistics}

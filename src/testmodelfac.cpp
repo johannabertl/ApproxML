@@ -9,7 +9,7 @@ using namespace arma;
 // [[Rcpp::depends(RcppArmadillo)]]
 
 // [[Rcpp::export]]
-arma::mat testmodelfac(String type, arma::vec parameters, arma::mat fixed_parameters)
+arma::mat testmodelfac(String type, arma::vec parameters, List fixed_parameters)
 {
   Model_Factory* myFactory = new Model_Factory();
   Model* std_norm = myFactory->Create_Model(type);
@@ -23,5 +23,6 @@ arma::mat testmodelfac(String type, arma::vec parameters, arma::mat fixed_parame
 
 
 /*** R
-testmodelfac("Normal", c(0,0), diag(2))
+testmodelfac("Normal", c(0,0), list(VC=diag(2)))
+testmodelfac("Coalescent_theta", 2.5, list(n=5))
 */

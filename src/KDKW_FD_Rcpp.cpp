@@ -1,11 +1,10 @@
 #include <RcppArmadillo.h>
-#include "SIMtestC.h"
 #include "bw.h"
 #include "kernels.h"
 #include "Model_Factory.h"
-#include "Create_Model.h"
 #include "Model.h"
 #include "Normal.h"
+#include "Coalescent_theta.h"
 using namespace Rcpp;
 using namespace arma;
 
@@ -73,7 +72,7 @@ using namespace arma;
 //' @export
 // [[Rcpp::export]]
 List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector theta_min, 
-                           NumericVector theta_max, String simfun,
+                           NumericVector theta_max, String simfun, List fixed_parameters,
                            int K, int nk,
                            double a, double ce, double alpha = 1, double gamma = 1/6,
                            int A = 0, int C = 0) {
@@ -81,16 +80,12 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
   // Number of paramters
   int p = theta_0.size();
   
-  // VC matrix (for normal distribution simulation)
-  // --- TEMPORARY ---
-  arma::mat vc = diagmat(ones(p));
-  
   // initialize Model objects
   Model_Factory* myFactory = new Model_Factory();
   Model* model_plus = myFactory->Create_Model(simfun);
   Model* model_minus = myFactory->Create_Model(simfun);
-  model_plus->fixed_parameters = vc;
-  model_minus->fixed_parameters = vc;
+  model_plus->fixed_parameters = fixed_parameters;
+  model_minus->fixed_parameters = fixed_parameters;
   
   // Empty matrix for the iterates
   NumericMatrix theta(K, p);
@@ -192,21 +187,44 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
 
 proc.time()[3]
 test = KDKW_FD_Rcpp(s_obs = 1:5, theta_0 = c(0.5,1.5, 2.5, 3.5, 4.5), 
-                    theta_min = rep(-5, 5), theta_max = rep(10, 5), 
-                    K = 3000, a = 500, ce = 2, nk = 10, simfun = "Normal") 
+                    theta_min = rep(-5, 5), theta_max = rep(10, 5), simfun = "Normal",
+                    fixed_parameters = list(VC = diag(5)),
+                    K = 3000, a = 500, ce = 2, nk = 10) 
 proc.time()[3]
 matplot(test$theta, t="l")
 
+test2 = KDKW_FD_Rcpp(s_obs = 3, theta_0 = 1, 
+                     theta_min = 0, theta_max = 10, simfun = "Coalescent_theta",
+                     fixed_parameters = list(n = 5),
+                     K = 500, a = 10, ce = 1, nk = 10)
+plot(test2$theta, t="l")
+
 */
 
+/* missing features: 
+ * - log likelihood
+ * - different bandwidth functions
+ */
+
+/* improvements: 
+ * - use .at() instead of [] (maybe not for Armadillo structures? Find out!)
+ * - change the fixed_parameters List to a better c++ datatype, to avoid using as<..>(..) each 
+ * time simulate() is called.
+ * - allow infinity in the constraints?
+ * - handle missing values?
+ * - use Rcpp::checkUserInterrupt() 
+ */
 
 /* Try to catch the following errors: 
  * - nk = 1 needs a fixed bw. Doesn't work right now. Throw an error.
  * - make sure that theta_0, theta_min and theta_max have the same length. 
  * - make sure that s_obs and the output of the simulation function have the 
  * same dimension.
- * - log likelihood
+ * - make sure that the parameters and fixed_parameters are correct (e. g. for normal 
+ * distribution, check if dimensions fit -- implement check_parameters method)
  * - check constraints and ck[1] before starting the algorithm
- * - allow infinity in the constraints?
- * - use .at() instead of [] (maybe not for Armadillo structures? Find out!)
+ */
+
+/* Before uploading to CRAN, read: https://journal.r-project.org/archive/2011-2/RJournal_2011-2_Plummer.pdf 
+ * 
  */

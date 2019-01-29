@@ -61,8 +61,8 @@
 #' matplot(test$theta, t="l")
 #'
 #' @export
-KDKW_FD_Rcpp <- function(s_obs, theta_0, theta_min, theta_max, simfun, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L, C = 0L) {
-    .Call('_ApproxML_KDKW_FD_Rcpp', PACKAGE = 'ApproxML', s_obs, theta_0, theta_min, theta_max, simfun, K, nk, a, ce, alpha, gamma, A, C)
+KDKW_FD_Rcpp <- function(s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L, C = 0L) {
+    .Call('_ApproxML_KDKW_FD_Rcpp', PACKAGE = 'ApproxML', s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha, gamma, A, C)
 }
 
 SIMtestC <- function(nk, theta, sigma) {
@@ -77,12 +77,8 @@ normal_diag <- function(dat, x, H) {
     .Call('_ApproxML_normal_diag', PACKAGE = 'ApproxML', dat, x, H)
 }
 
-set_fixed_parameters <- function(fixed_parameters) {
-    .Call('_ApproxML_set_fixed_parameters', PACKAGE = 'ApproxML', fixed_parameters)
-}
-
-testfun2 <- function(parameters, fixed_parameters) {
-    .Call('_ApproxML_testfun2', PACKAGE = 'ApproxML', parameters, fixed_parameters)
+chooseRcpp <- function(n, theta, nk) {
+    .Call('_ApproxML_chooseRcpp', PACKAGE = 'ApproxML', n, theta, nk)
 }
 
 testmodelfac <- function(type, parameters, fixed_parameters) {
