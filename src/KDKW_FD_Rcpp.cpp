@@ -66,7 +66,8 @@ using namespace arma;
 //' # bivariate normal distribution
 //'
 //' test = KDKW_FD_Rcpp(s_obs = c(1,2), theta_0 = c(0.5,1.5), theta_min = c(-5, -5), 
-//' theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = SIMtestC) 
+//' theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = "Normal",
+//' fixed_parameters = list(VC = diag(2))) 
 //' matplot(test$theta, t="l")
 //'
 //' @export
@@ -75,7 +76,10 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
                            NumericVector theta_max, String simfun, List fixed_parameters,
                            int K, int nk,
                            double a, double ce, double alpha = 1, double gamma = 1/6,
-                           int A = 0, int C = 0) {
+                           int A = 0, int C = 0, bool use_log = true) {
+  
+  // Test if something is happening at all
+  //Rcout << "hello";
   
   // Number of paramters
   int p = theta_0.size();
@@ -96,12 +100,9 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
   IntegerVector max_shift(K);
   
   // gain sequences
-  
   IntegerVector kvec = seq(1,K);
- 
   DoubleVector ck = ce/(pow(kvec+1+C, gamma));
   DoubleVector ak = a/(pow(kvec+1+A, alpha));
-  // (works, I checked this)
 
   
   // Algorithm
@@ -109,8 +110,8 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
     
     
     // TESTING:
-    // std::cout << k;
-    // std::cout << "\n";
+    // Rcout << k;
+    // Rcout << "\n";
     
     // empty gradient vector
     DoubleVector gradient(p);
@@ -122,12 +123,12 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
       if(theta(k-1,j) < theta_min[j] + ck[k]){
         theta(k-1,j) = theta_min[j] + ck[k];
         min_shift[k] = min_shift[k] + 1;
-        cout << "min corr \n";
+        // Rcout << "min corr \n";
       }
       if(theta(k-1,j) > theta_max[j] - ck[k]){
         theta(k-1,j) = theta_max[j] - ck[k];
         max_shift[k] = max_shift[k] + 1;
-        cout << "max corr \n";
+        // Rcout << "max corr \n";
       }
     }
     
@@ -164,14 +165,21 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
       double kde_plus = mean(normal_diag(s_plus, s_obs, H_plus));
       double kde_minus = mean(normal_diag(s_minus, s_obs, H_minus));
       
-      // std::cout << "\n";
-      // std::cout << kde_plus;
-      // std::cout << " - ";
-      // std::cout << kde_minus;
-      // std::cout << "\n";
+      // Rcout << "\n";
+      // Rcout << kde_plus;
+      // Rcout << " - ";
+      // Rcout << kde_minus;
+      // Rcout << "\n";
       
-      
-      gradient[j] = (kde_plus - kde_minus)/2*ck[k];
+      if(use_log){
+        if(kde_plus == 0 | kde_minus == 0){
+          stop("Kernel density estimate is 0, cannot compute logarithm.");
+        } else {
+          gradient[j] = (log(kde_plus) - log(kde_minus))/(2*ck[k]);
+        }
+      } else {
+        gradient[j] = (kde_plus - kde_minus)/(2*ck[k]);
+      }
     }
     
     // UPDATE
@@ -185,18 +193,56 @@ List KDKW_FD_Rcpp(NumericVector s_obs, NumericVector theta_0, NumericVector thet
 
 /*** R
 
-proc.time()[3]
+
+
+# 5-dim normal distribution: estimating the mean vector
+# Comparison between Rcpp and R function
+
+t1 = proc.time()[3]
+test = KDKW_FD_Rcpp(s_obs = 1:5, theta_0 = c(0.5, 1.5, 2.5, 3.5, 4.5), 
+                    theta_min = rep(-5, 5), theta_max = rep(10, 5), simfun = "Normal",
+                    fixed_parameters = list(VC = diag(5)),
+                    K = 500, a = 500, ce = 2, nk = 10, use_log = F) 
+proc.time()[3] - t1
+matplot(test$theta, t="l")
+
+t1 = proc.time()[3]
+test = KDKW.FD(s.obs = 1:5, theta.0 = c(0.5, 1.5, 2.5, 3.5, 4.5), 
+                    rest = matrix(c(-5, 10), nrow=5, ncol=2, byrow=T), simfun = SIMnormalmean.anydim,
+                    sigma = diag(5), n = 1, Hnum = 1, kernel = dmvnorm2,
+                    K = 500, a = 500, ce = 2, nk = 10, lg = F) 
+proc.time()[3] - t1
+matplot(test$theta, t="l")
+
+# 5-dim normal distribution: 
+# Starting too far from the maximum, where the likelihood is (numerically) zero.
+
+t1 = proc.time()[3]
 test = KDKW_FD_Rcpp(s_obs = 1:5, theta_0 = c(0.5,1.5, 2.5, 3.5, 4.5), 
                     theta_min = rep(-5, 5), theta_max = rep(10, 5), simfun = "Normal",
                     fixed_parameters = list(VC = diag(5)),
-                    K = 3000, a = 500, ce = 2, nk = 10) 
-proc.time()[3]
-matplot(test$theta, t="l")
+                    K = 3000, a = 500, ce = 2, nk = 10, use_log = T) 
+  proc.time()[3] - t1
+  matplot(test$theta, t="l")
 
+
+# Coalescent: estimating theta
+# Comparison between KDKW_FD_Rcpp and KDKW.FD.
+
+t1 = proc.time()[3]
 test2 = KDKW_FD_Rcpp(s_obs = 3, theta_0 = 1, 
                      theta_min = 0, theta_max = 10, simfun = "Coalescent_theta",
                      fixed_parameters = list(n = 5),
-                     K = 500, a = 10, ce = 1, nk = 10)
+                     K = 1500, a = 10, ce = 1, nk = 10)
+proc.time()[3] - t1
+plot(test2$theta, t="l")
+
+t1 = proc.time()[3]
+test2 = KDKW.FD(s.obs = 3, theta.0 = 1, 
+                  rest = matrix(c(0, 10), nrow=1), simfun = SIMcoal.theta,
+                     n = 5, Hnum = 1, kernel = dnorm2,
+                     K = 1500, a = 10, ce = 1, nk = 10)
+proc.time()[3] - t1
 plot(test2$theta, t="l")
 
 */
