@@ -35,8 +35,15 @@ arma::mat chooseRcpp(int n, double theta, int nk) {
 }
 
 
+// [[Rcpp::export]]
+double testlog(double x){
+  return log(x);
+}
+
 
 
 /*** R
 chooseRcpp(10, 2.5, 5)
+testlog(10)
+log(10)
 */

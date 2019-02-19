@@ -39,13 +39,9 @@ bw.nrd.flex = function(x){
 
 ### 3. Flexible bw.nrd0 function (Scott)
 # (using the modified bw.nrd0 function that allows NA values)
-
-#' @export
-
 bw.nrd0.mod = function(x){bw.nrd0(x[complete.cases(x)])}
 
 #' @export
-
 bw.nrd0.flex = function(x){
   if(is.matrix(x)){
     bw = apply(x, 2, bw.nrd0.mod)

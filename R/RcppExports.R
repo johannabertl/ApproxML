@@ -57,17 +57,28 @@
 #' # bivariate normal distribution
 #'
 #' test = KDKW_FD_Rcpp(s_obs = c(1,2), theta_0 = c(0.5,1.5), theta_min = c(-5, -5), 
-#' theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = SIMtestC) 
+#' theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = "Normal",
+#' fixed_parameters = list(VC = diag(2))) 
 #' matplot(test$theta, t="l")
 #'
 #' @export
-KDKW_FD_Rcpp <- function(s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L, C = 0L) {
-    .Call('_ApproxML_KDKW_FD_Rcpp', PACKAGE = 'ApproxML', s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha, gamma, A, C)
+KDKW_FD_Rcpp <- function(s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L, C = 0L, use_log = TRUE) {
+    .Call('_ApproxML_KDKW_FD_Rcpp', PACKAGE = 'ApproxML', s_obs, theta_0, theta_min, theta_max, simfun, fixed_parameters, K, nk, a, ce, alpha, gamma, A, C, use_log)
 }
 
 SIMtestC <- function(nk, theta, sigma) {
     .Call('_ApproxML_SIMtestC', PACKAGE = 'ApproxML', nk, theta, sigma)
 }
+
+#' Estimating the bandwidth
+#' 
+#' The function bw_nrd0 estimates the entries of a diagonal bandwidth matrix, based on
+#' the multivariate extension of "Silverman's rule of thumb". 
+#' 
+#' Note that the implementation is not the same as bw.nrd0 in R, which is more robust. 
+#' In some cases, bw.nrd0 uses the IQR or sets the bandwidth to 1. This is not 
+#' implemented here to save runtime.
+NULL
 
 bw_nrd0 <- function(x) {
     .Call('_ApproxML_bw_nrd0', PACKAGE = 'ApproxML', x)
@@ -79,6 +90,10 @@ normal_diag <- function(dat, x, H) {
 
 chooseRcpp <- function(n, theta, nk) {
     .Call('_ApproxML_chooseRcpp', PACKAGE = 'ApproxML', n, theta, nk)
+}
+
+testlog <- function(x) {
+    .Call('_ApproxML_testlog', PACKAGE = 'ApproxML', x)
 }
 
 testmodelfac <- function(type, parameters, fixed_parameters) {

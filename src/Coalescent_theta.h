@@ -48,21 +48,3 @@ public:
 
 #endif
 
-
-
-/***R
-
-
-
-*/
-
-/*** R
-# Simulate number of segregating sites
-# from a coalescent process with theta as the only parameter and sample size n
-# under the infinite sites model
-
-# input values:
-# nk ... number of simulated data sets
-# theta ... scaled mutation rate
-# n ... sample size
-*/

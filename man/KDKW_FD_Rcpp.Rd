@@ -6,7 +6,7 @@
 \usage{
 KDKW_FD_Rcpp(s_obs, theta_0, theta_min, theta_max, simfun,
   fixed_parameters, K, nk, a, ce, alpha = 1, gamma = 1/6, A = 0L,
-  C = 0L)
+  C = 0L, use_log = TRUE)
 }
 \arguments{
 \item{s_obs}{Vector of observed summary statistics}
@@ -70,7 +70,8 @@ The function is implemented using Rcpp and RcppArmadillo.
 # bivariate normal distribution
 
 test = KDKW_FD_Rcpp(s_obs = c(1,2), theta_0 = c(0.5,1.5), theta_min = c(-5, -5), 
-theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = SIMtestC) 
+theta_max = c(5, 5), K = 3000, a = 10, ce = 2, nk = 10, simfun = "Normal",
+fixed_parameters = list(VC = diag(2))) 
 matplot(test$theta, t="l")
 
 }
